@@ -1,0 +1,44 @@
+<section class="auth-page">
+  <div class="auth-shell">
+    <div class="auth-copy">
+      <p class="eyebrow">{{ languageService.t('login.eyebrow') }}</p>
+      <h1>{{ languageService.t('login.title') }}</h1>
+      <p>
+        {{ languageService.t('login.copy') }}
+      </p>
+    </div>
+
+    <form class="auth-form" [formGroup]="form" (ngSubmit)="submit()">
+      <h2>{{ languageService.t('login.heading') }}</h2>
+
+      @if (error()) {
+        <p class="error-message">{{ error() }}</p>
+      }
+
+      <label>
+        {{ languageService.t('login.email') }}
+        <input type="email" formControlName="email" autocomplete="email" />
+        @if (form.controls.email.touched && form.controls.email.invalid) {
+          <span>{{ languageService.t('login.emailError') }}</span>
+        }
+      </label>
+
+      <label>
+        {{ languageService.t('login.password') }}
+        <input type="password" formControlName="password" autocomplete="current-password" />
+        @if (form.controls.password.touched && form.controls.password.invalid) {
+          <span>{{ languageService.t('login.passwordError') }}</span>
+        }
+      </label>
+
+      <button type="submit" class="primary-button" [disabled]="loading()">
+        {{ loading() ? languageService.t('login.signingIn') : languageService.t('login.heading') }}
+      </button>
+
+      <p class="switch-link">
+        {{ languageService.t('login.newCustomer') }}
+        <a routerLink="/auth/register">{{ languageService.t('header.createAccount') }}</a>
+      </p>
+    </form>
+  </div>
+</section>

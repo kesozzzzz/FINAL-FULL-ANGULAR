@@ -1,0 +1,62 @@
+<header class="site-header">
+  <div class="container header-inner">
+    <a routerLink="/products" class="brand" (click)="closeMenu()">
+      <span class="brand-mark">E</span>
+      <span>EverShop</span>
+    </a>
+
+    <button
+      class="menu-button"
+      type="button"
+      (click)="toggleMenu()"
+      [attr.aria-label]="languageService.t('header.toggleNavigation')"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav class="nav" [class.open]="menuOpen()" aria-label="Main navigation">
+      <a routerLink="/products" routerLinkActive="active" (click)="closeMenu()">
+        {{ languageService.t('header.products') }}
+      </a>
+      <a routerLink="/cart" routerLinkActive="active" (click)="closeMenu()">
+        {{ languageService.t('header.cart') }}
+        @if (cartService.count() > 0) {
+          <span class="cart-badge">{{ cartService.count() }}</span>
+        }
+      </a>
+      <a routerLink="/favorites" routerLinkActive="active" class="icon-link" (click)="closeMenu()">
+        <span aria-hidden="true">&#9829;</span>
+        {{ languageService.t('header.favorites') }}
+        @if (favoritesService.count() > 0) {
+          <span class="cart-badge">{{ favoritesService.count() }}</span>
+        }
+      </a>
+
+      <button class="theme-toggle" type="button" (click)="toggleTheme()">
+        {{ themeService.isDark() ? languageService.t('header.light') : languageService.t('header.dark') }}
+      </button>
+
+      <button class="language-toggle" type="button" (click)="toggleLanguage()">
+        {{ languageService.t('header.switchLanguage') }}
+      </button>
+
+      <div class="auth-actions">
+        @if (authService.isAuthenticated()) {
+          <span class="user-label">{{ authService.user()?.firstName || languageService.t('header.account') }}</span>
+          <button type="button" class="ghost-button" (click)="signOut()">
+            {{ languageService.t('header.signOut') }}
+          </button>
+        } @else {
+          <a routerLink="/auth/login" routerLinkActive="active" (click)="closeMenu()">
+            {{ languageService.t('header.signIn') }}
+          </a>
+          <a routerLink="/auth/register" class="primary-link" (click)="closeMenu()">
+            {{ languageService.t('header.createAccount') }}
+          </a>
+        }
+      </div>
+    </nav>
+  </div>
+</header>

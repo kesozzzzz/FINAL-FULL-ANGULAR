@@ -1,0 +1,53 @@
+<section class="favorites-page">
+  <div class="container">
+    <div class="favorites-heading">
+      <div>
+        <p class="eyebrow">{{ languageService.t('favorites.eyebrow') }}</p>
+        <h1>{{ languageService.t('favorites.title') }}</h1>
+        <p>{{ languageService.t('favorites.copy') }}</p>
+      </div>
+      <a routerLink="/products" class="secondary-button">{{ languageService.t('cart.continue') }}</a>
+    </div>
+
+    @if (message()) {
+      <p class="status-message">{{ message() }}</p>
+    }
+
+    @if (favoritesService.isLocalOnly() && favoritesService.count() > 0) {
+      <p class="status-message">{{ languageService.t('favorites.localOnly') }}</p>
+    }
+
+    @if (error()) {
+      <p class="error-message">{{ error() }}</p>
+    }
+
+    @if (loading()) {
+      <p class="loading-message">{{ languageService.t('favorites.loading') }}</p>
+    }
+
+    @if (products().length) {
+      <div class="favorites-grid">
+        @for (product of products(); track product._id) {
+          <app-product-card
+            [product]="product"
+            [adding]="addingProductId() === product._id"
+            [inCart]="cartService.isInCart(product._id)"
+            [favorite]="favoritesService.isFavorite(product._id)"
+            [favoriting]="favoritingProductId() === product._id"
+            [showDetails]="false"
+            (add)="addToCart($event)"
+            (favoriteChange)="toggleFavorite($event)"
+          ></app-product-card>
+        }
+      </div>
+    } @else if (!loading()) {
+      <div class="empty-state">
+        <h2>{{ languageService.t('favorites.emptyTitle') }}</h2>
+        <p>{{ languageService.t('favorites.emptyCopy') }}</p>
+        <button type="button" class="primary-button" (click)="goToProducts()">
+          {{ languageService.t('cart.browse') }}
+        </button>
+      </div>
+    }
+  </div>
+</section>

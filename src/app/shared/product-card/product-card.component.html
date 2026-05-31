@@ -1,0 +1,71 @@
+<article class="product-card">
+  <button
+    class="favorite-button"
+    type="button"
+    [class.active]="favorite()"
+    [disabled]="favoriting()"
+    (click)="favoriteClicked($event)"
+    [attr.aria-label]="
+      favorite()
+        ? languageService.t('products.unfavorite')
+        : languageService.t('products.favorite')
+    "
+  >
+    @if (favorite()) {
+      &#9829;
+    } @else {
+      &#9825;
+    }
+  </button>
+
+  <button
+    class="image-button"
+    type="button"
+    (click)="viewClicked()"
+    [attr.aria-label]="languageService.t('productCard.view') + ' ' + product().title"
+  >
+    <img [src]="product().thumbnail" [alt]="product().title" loading="lazy" referrerpolicy="no-referrer" />
+    @if (product().price.discountPercentage > 0) {
+      <span class="discount">-{{ product().price.discountPercentage }}%</span>
+    }
+  </button>
+
+  <div class="card-body">
+    <div class="meta-row">
+      <span>{{ product().brand }}</span>
+      <span>{{ product().rating | number: '1.1-1' }} / 5</span>
+    </div>
+
+    <h3>{{ product().title }}</h3>
+    <p>{{ product().description }}</p>
+
+    <div class="price-row">
+      <strong>{{ product().price.current | currency: product().price.currency : 'symbol' : '1.0-0' }}</strong>
+      @if (product().price.beforeDiscount > product().price.current) {
+        <span>{{ product().price.beforeDiscount | currency: product().price.currency : 'symbol' : '1.0-0' }}</span>
+      }
+    </div>
+
+    <div class="action-row">
+      @if (showDetails()) {
+        <button class="secondary-button" type="button" (click)="viewClicked()">
+          {{ languageService.t('productCard.details') }}
+        </button>
+      }
+      <button
+        class="primary-button"
+        type="button"
+        [disabled]="product().stock < 1 || adding()"
+        (click)="addClicked()"
+      >
+        @if (adding()) {
+          {{ languageService.t('productCard.adding') }}
+        } @else if (inCart()) {
+          {{ languageService.t('productCard.addOneMore') }}
+        } @else {
+          {{ languageService.t('productCard.addToCart') }}
+        }
+      </button>
+    </div>
+  </div>
+</article>

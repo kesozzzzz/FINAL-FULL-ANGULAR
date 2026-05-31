@@ -1,0 +1,79 @@
+<section class="cart-page">
+  <div class="container">
+    <div class="cart-heading">
+      <div>
+        <p class="eyebrow">{{ languageService.t('cart.eyebrow') }}</p>
+        <h1>{{ languageService.t('cart.title') }}</h1>
+      </div>
+      <a routerLink="/products" class="secondary-button">{{ languageService.t('cart.continue') }}</a>
+    </div>
+
+    @if (message()) {
+      <p class="status-message">{{ message() }}</p>
+    }
+
+    @if (error()) {
+      <p class="error-message">{{ error() }}</p>
+    }
+
+    @if (loading()) {
+      <p class="loading-message">{{ languageService.t('cart.loading') }}</p>
+    }
+
+    @if (cartService.items().length) {
+      <div class="cart-layout">
+        <div class="cart-items">
+          @for (item of cartService.items(); track item.id) {
+            <article class="cart-item">
+              <img
+                [src]="item.product?.thumbnail || 'favicon.ico'"
+                [alt]="item.product?.title || languageService.t('cart.productImage')"
+                referrerpolicy="no-referrer"
+              />
+              <div class="item-copy">
+                <h2>{{ item.product?.title || item.id }}</h2>
+                <p>{{ item.product?.brand || languageService.t('cart.product') }}</p>
+                <strong>
+                  {{ (item.product?.price?.current ?? 0) | currency: (item.product?.price?.currency ?? 'USD') : 'symbol' : '1.0-0' }}
+                </strong>
+              </div>
+              <div class="quantity-control">
+                <button type="button" (click)="decrement(item)" [disabled]="updatingId() === item.id">-</button>
+                <span>{{ item.quantity }}</span>
+                <button type="button" (click)="increment(item)" [disabled]="updatingId() === item.id">+</button>
+              </div>
+              <button class="remove-button" type="button" (click)="remove(item)" [disabled]="updatingId() === item.id">
+                {{ languageService.t('cart.remove') }}
+              </button>
+            </article>
+          }
+        </div>
+
+        <aside class="summary-panel">
+          <h2>{{ languageService.t('cart.summary') }}</h2>
+          <div class="summary-row">
+            <span>{{ languageService.t('cart.items') }}</span>
+            <strong>{{ cartService.count() }}</strong>
+          </div>
+          <div class="summary-row">
+            <span>{{ languageService.t('cart.subtotal') }}</span>
+            <strong>{{ cartService.subtotal() | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
+          </div>
+          <p>{{ languageService.t('cart.checkoutCopy') }}</p>
+          <button class="primary-button" type="button" (click)="checkout()" [disabled]="loading()">
+            {{ languageService.t('cart.checkout') }}
+          </button>
+          <button class="secondary-button wide" type="button" (click)="clear()" [disabled]="loading()">
+            {{ languageService.t('cart.clear') }}
+          </button>
+        </aside>
+      </div>
+    } @else if (!loading()) {
+      <div class="empty-state">
+        <h2>{{ languageService.t('cart.emptyTitle') }}</h2>
+        <p>{{ languageService.t('cart.emptyCopy') }}</p>
+        <a routerLink="/products" class="primary-link">{{ languageService.t('cart.browse') }}</a>
+      </div>
+    }
+  </div>
+</section>
