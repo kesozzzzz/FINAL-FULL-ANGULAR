@@ -1,7 +1,7 @@
 # 🔱 Full-Stack Angular E-Commerce App
 
 <p align="center">
-  <img src="angular full site demo pic.jpg" alt="EverShop Dashboard Preview" width="100%" style="border-radius: 8px;"/>
+  <img src="angular full site demo pic.png" alt="EverShop Dashboard Preview" width="100%" style="border-radius: 8px;"/>
 </p>
 
 Welcome to my first full-stack e-commerce application built with **Angular**. 
